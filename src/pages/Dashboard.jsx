@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import SummaryCards from "../components/SummaryCards";
 import FiltersBar from "../components/FiltersBar";
 import MemberList from "../components/MemberList";
+import SelectedMemberPanel from "../components/SelectedMemberPanel";
+import TaskForm from "../components/TaskForm";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
+  const role = useSelector(state => state.role.currentRole);
+  const members = useSelector(state => state.members.members);
+  
+  const [selectedMember, setSelectedMember] = useState(null);
+
   return (
     <div
       style={{
@@ -29,10 +37,10 @@ function Dashboard() {
           }}
         >
           <h3 style={{ marginTop: 0 }}>Team Members</h3>
-          <MemberList />
+
+          <MemberList onSelect={setSelectedMember} />
         </div>
       </div>
-
 
       {/* RIGHT COLUMN */}
       <div
@@ -43,8 +51,15 @@ function Dashboard() {
           border: "1px solid #e5e7eb"
         }}
       >
-        <h3>Right Panel</h3>
-        <p>Selected member, task form, charts, etc.</p>
+        <SelectedMemberPanel selectedMemberId={selectedMember} />
+
+
+        {role === "lead" && (
+          <>
+            <h3 style={{ marginTop: "20px" }}>Assign New Task</h3>
+            <TaskForm members={members} />
+          </>
+        )}
       </div>
     </div>
   );

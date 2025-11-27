@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import MemberCard from "./MemberCard";
 
-export default function MemberList() {
+export default function MemberList({ onSelect }) {
   const members = useSelector(state => state.members.members);
   const ui = useSelector(state => state.members.ui);
 
@@ -25,7 +25,13 @@ export default function MemberList() {
   return (
     <div>
       {sorted.map(member => (
-        <MemberCard key={member.id} member={member} />
+        <div
+          key={member.id}
+          onClick={() => onSelect(member.id)}
+          style={{ cursor: "pointer" }}
+        >
+          <MemberCard member={member} />
+        </div>
       ))}
     </div>
   );
